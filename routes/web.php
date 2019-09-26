@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('hello-world', 'HelloWorldController@index');
 Route::view('/bem-vindo', 'bemvindo',['name' => 'Matheus']);
 //Parâmetros dinâmicos
+    //Apelido para rotas
 Route::get('/post/{slug}', function($slug){
     return $slug;
 })->name('post.single');
@@ -29,6 +30,30 @@ Route::get('/page/{slug?}', function($slug = null){
 Route::get('/user/{id}', function($slug){
     return $slug;
 })->where(['id' => '[0-9]+']);
-//Apelido para rotas
+
+//Grupo de rotas & prefixo
+
+// Route::prefix('posts')->name('post.')->group(function(){
+
+//     Route::get('/', 'PostController@index')->name('index');
+
+//     Route::get('/create', 'PostController@index')->name('index');
+
+//     Route::post('/save', 'PostController@save')->name('save');
+
+// });
+//Grupo de Rotas & Namespace
+// Route::namespace('Admin')->prefix('admin')->group(function(){
+
+//     Route::get('/users/','UserController@index')->name('users.index');
+
+//     Route::get('/posts/', 'PostController@index')->name('post.index');
+// });
+
+//Route Resource
+
+Route::resource('/users', 'UserController');
+
+
 
 
