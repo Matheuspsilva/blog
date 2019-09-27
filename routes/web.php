@@ -55,5 +55,14 @@ Route::get('/user/{id}', function($slug){
 Route::resource('/users', 'UserController');
 
 
+Route::prefix('admin')->namespace('admin')->group(function(){
 
+    Route::prefix('posts')->name('posts.')->group(function(){
 
+        Route::get('/create', 'PostController@create')->name('create');
+
+        Route::post('/store', 'PostController@store')->name('store');
+
+    });
+
+});
