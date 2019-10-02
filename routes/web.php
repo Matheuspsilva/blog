@@ -12,6 +12,10 @@
 */
 
 //Função anônima
+
+//use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -55,14 +59,18 @@ Route::get('/user/{id}', function($slug){
 Route::resource('/users', 'UserController');
 
 
-Route::prefix('admin')->namespace('admin')->group(function(){
+// Route::prefix('admin')->namespace('admin')->group(function(){
 
-    Route::prefix('posts')->name('posts.')->group(function(){
+//     Route::prefix('posts')->name('posts.')->group(function(){
 
-        Route::get('/create', 'PostController@create')->name('create');
+//         Route::get('/create', 'PostController@create')->name('create');
 
-        Route::post('/store', 'PostController@store')->name('store');
+//         Route::post('/store', 'PostController@store')->name('store');
 
+//     });
+
+// });
+
+Route::prefix('admin')->namespace('Admin')->group(function(){
+    Route::resource('posts', 'PostController');
     });
-
-});
