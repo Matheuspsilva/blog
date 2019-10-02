@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <form action="{{route('posts.store')}}" method="post">
     @csrf
 
@@ -24,4 +28,5 @@
     <button class="btn btn-lg btn-sucess">Criar Postagem</button>
 
 </form>
+@endsection
 

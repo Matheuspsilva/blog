@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <form action="{{route('posts.update', ['post' => $post->id])}}" method="post">
     @csrf
     @method("PUT")
@@ -25,9 +29,10 @@
     <button class="btn btn-lg btn-success">Atualizar Postagem</button>
 
 </form>
-
+<hr>
 <form action="{{route('posts.destroy',['post' => $post->id])}}" method="post">
     @csrf
     @method('DELETE')
-    <button type="submit">Remover Post</button>
+    <button type="submit" class="btn btn-lg btn-danger">Remover Post</button>
 </form>
+@endsection
