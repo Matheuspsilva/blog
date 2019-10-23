@@ -11,7 +11,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::paginate(15);
-        dd($posts);
+        return view('posts.index', compact('posts'));
     }
 
     public function show($id)
@@ -28,10 +28,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['user_id'] = 1;
         $data['is_active'] = true;
 
-        dd(Post::create($data));
+        $user = User::find(1);
+
+        dd($user->posts()->create($data));
 
     }
 
