@@ -25,7 +25,7 @@
         <input type="text" name="slug" class="form-control">
     </div>
 
-    <button class="btn btn-lg btn-sucess">Criar Postagem</button>
+    <button class="btn btn-lg btn-success">Criar Postagem</button>
 
 </form>
 @endsection

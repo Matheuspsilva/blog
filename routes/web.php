@@ -14,6 +14,8 @@
 //Função anônima
 
 //use Illuminate\Routing\Route;
+
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -73,4 +75,6 @@ Route::resource('/users', 'UserController');
 
 Route::prefix('admin')->namespace('Admin')->group(function(){
     Route::resource('posts', 'PostController');
+    Route::resource('categories', 'CategoryController');
+   
     });

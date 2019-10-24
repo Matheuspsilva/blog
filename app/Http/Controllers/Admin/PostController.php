@@ -33,7 +33,11 @@ class PostController extends Controller
 
         $user = User::find(1);
 
-        dd($user->posts()->create($data));
+        $post = $user->posts()->create($data);
+
+
+        flash('Post criado com sucesso!')->success();
+        return redirect()->route('posts.index');
 
     }
 

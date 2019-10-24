@@ -9,13 +9,26 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     /**
+     *  @var $category
+     */
+    private $category;
+
+    
+    public function __construct(Category $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $categories = $this->category->paginate(15);
+
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -25,7 +38,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
@@ -36,7 +49,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        try{
+            $category = $this->category->create($data);
+
+            flash('Categoria criada com sucesso!')->success();
+            return redirect()->route('categories.index');
+        }catch(\Exception $e){
+            $message = 'Erro ao criar categoria!';
+
+            if(env('APP_DEBUG')){
+                $message = $e->getMessage();
+            }
+
+            flash($message)->warning();
+            return redirect()->back();
+        }
     }
 
     /**
@@ -47,7 +75,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -58,7 +86,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return redirect()->route('categories.show', ['category' => $category->id]);
     }
 
     /**
@@ -70,7 +98,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->all();
+
+        try{
+            $category->update($data);
+
+            flash('Categoria atualizada com sucesso!')->success();
+            return redirect()->route('categories.show', ['category' => $category->id]);
+        }catch(\Exception $e){
+            $message = 'Erro ao atualizar categoria';
+
+            if(env(APP_DEBUG)){
+                $message = $e->getMessage();
+            }
+
+            flash($message)->warning();
+            return redirect()->back();
+        }
     }
 
     /**
@@ -81,6 +125,23 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try{
+            $category->delete();
+
+            flash('Categoria removida com sucesso!')->success();
+            return redirect()->back();
+
+        }catch(\Exception $e){
+            $message = 'Erro ao remover categoria!';
+
+            if(env('APP_DEBUG')){
+                $message = $e->getMessage();
+            }
+
+            flash($message)->warning();
+            return redirect()->back();
+
+        }
     }
+
 }
