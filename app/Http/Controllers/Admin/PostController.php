@@ -9,52 +9,100 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    public function __construct(Post $post)
+    {
+        $this->post = $post;
+    }
+
     public function index()
     {
         $posts = Post::paginate(15);
         return view('posts.index', compact('posts'));
     }
 
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::findOrFail($id);
-        return view('posts.edit', compact('post'));
+        $categories = \App\Category::all(['id','name']);
+
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     public function create()
     {
-        return view('posts.create');
+        $categories = \App\Category::all(['id','name']);
+
+        return view('posts.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['is_active'] = true;
+        try{
+            $data['is_active'] = true;
 
-        $user = User::find(1);
+            $user = User::find(1);
+    
+            $post = $user->posts()->create($data);
+            
+            $post->categories()->sync($data['categories']);
+    
+            flash('Post criado com sucesso!')->success();
+            return redirect()->route('posts.index');
+        }catch(\Exception $e){
+            $message = 'Erro ao remover cateogoria!';
 
-        $post = $user->posts()->create($data);
-
-
-        flash('Post criado com sucesso!')->success();
-        return redirect()->route('posts.index');
-
+            if(env('APP_DEBUG')){
+                $message = $e->getMessage();
+            }
+            flash($message)->warning();
+            return redirect()->back();
+        }
+   
     }
 
-    public function update($id, Request $request)
+    public function update(Post $post, Request $request)
     {
         //Atualizando dados com mass assignment
         $data = $request->all();
 
-        $post = Post::findOrFail($id);
+        try{
+            $post->update($data);
 
-        dd($post->update($data));
+            $post->categories()->sync($data['categories']);
+
+            flash('Postagem atualizada com sucesso!')->success();
+            return redirect()->route('posts.show', ['post' => $post->id]);
+            //return view('posts.show', ['post' => $post->id]);
+        }catch(\Exception $e){
+
+            $message = 'Erro ao remover post!';
+
+            if(env('APP_DEBUG')){
+                $message = $e->getMessage();
+            }
+            flash($message)->warning();
+            return redirect()->back();
+
+        }   
     }
 
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        $post = Post::findOrFail($id);
-        dd($post->delete());
+
+        try{
+            $post->delete();
+            flash('Postagem removida com sucesso')->warning();
+            return redirect()->route('posts.index');
+        }catch(\Exception $e){
+            if(env('APP_DEBUG')){
+                $message = $e->getMessage();
+            }
+
+            flash($message)->warning();
+            return redirect()->back();
+        }
+
     }
 
 }

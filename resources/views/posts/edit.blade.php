@@ -17,8 +17,22 @@
     </div>
 
     <div class="form-group">
-        <label for=""></label>
+        <label for="">Conteúdo</label>
     <textarea name="content" id="" cols="30" rows="10" class="form-control">{{$post->content}}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Categorias</label>
+        <div class="row">
+            @foreach($categories as $c)
+                <div class="col-2 checkbox">
+                    <label>
+                    <input type="checkbox" name="categories[]" value="{{$c->id}}" @if($post->categories->contains($c)) checked @endif> 
+                        {{$c->name}}
+                    </label>
+                </div>
+            @endforeach
+        </div>
     </div>
 
     <div class="form-group">
