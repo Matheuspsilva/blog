@@ -14,6 +14,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                @auth
                 <ul class="navbar-nav">
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
@@ -22,6 +23,7 @@
                         <a class="nav-link" href="{{ route('categories.index') }}">Categorias</a>
                     </li>
                 </ul>
+                @endauth
             </div>
         </nav>
         <div class="container">

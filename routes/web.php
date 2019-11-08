@@ -73,8 +73,16 @@ Route::resource('/users', 'UserController');
 
 // });
 
-Route::prefix('admin')->namespace('Admin')->group(function(){
-    Route::resource('posts', 'PostController');
-    Route::resource('categories', 'CategoryController');
-   
-    });
+Route::group(['middleware' => ['auth']], function () {
+    Route::prefix('admin')->namespace('Admin')->group(function(){
+        Route::resource('posts', 'PostController');
+        Route::resource('categories', 'CategoryController');
+       
+        });
+});
+
+
+
+Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');
