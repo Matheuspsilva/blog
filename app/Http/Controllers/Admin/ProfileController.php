@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
@@ -19,6 +20,7 @@ class ProfileController extends Controller
     }
 
     public function update(Request $request){
+        $user = auth()->user();
         $userData = $request->get('user');
         $profileData = $request->get('profile');
 
@@ -28,6 +30,13 @@ class ProfileController extends Controller
                 $userData['password'] = bcrypt($userData['password']);
             }else{
                 unset($userData['password']);
+            }
+
+            if($request->hasFile('avatar')) {
+                Storage::disk('public')->delete($user->avatar);
+                $profileData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            }else {
+                unset($profileData['avatar']);
             }
 
             $user = auth()->user();

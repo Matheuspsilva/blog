@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 use App\Post;
 use App\User;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -39,6 +40,12 @@ class PostController extends Controller
     {
         $data = $request->all();
         try{
+            if($request->hasFile('thumb')) {
+                $data['thumb'] = $request->file('thumb')->store('thumbs', 'public');
+                } else {
+                unset($data['thumb']);
+            }
+
             $data['is_active'] = true;
 
             $user = auth()->user();
@@ -67,6 +74,15 @@ class PostController extends Controller
         $data = $request->all();
 
         try{
+
+            if($request->hasFile('thumb')) {
+                //Remove a imagem atual
+                Storage::disk('public')->delete($post->thumb);
+                $data['thumb'] = $request->file('thumb')->store('thumbs', 'public');
+                } else {
+                unset($data['thumb']);
+            }
+
             $post->update($data);
 
             $post->categories()->sync($data['categories']);

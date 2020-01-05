@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form action="{{route('posts.update', ['post' => $post->id])}}" method="post">
+<form action="{{route('posts.update', ['post' => $post->id])}}" method="post" enctype="multipart/form-data">
     @csrf
     @method("PUT")
 
@@ -22,6 +22,18 @@
     </div>
 
     <div class="form-group">
+        <label for="">Slug</label>
+        <input type="text" name="slug" class="form-control" value="{{$post->slug}}">
+    </div>
+
+    <!-- Campo Tipo File -->
+    <div class="form-group">
+        <label>Foto de Capa</label>
+        <input type="file" name="thumb">
+    </div>
+
+
+    <div class="form-group">
         <label>Categorias</label>
         <div class="row">
             @foreach($categories as $c)
@@ -33,11 +45,6 @@
                 </div>
             @endforeach
         </div>
-    </div>
-
-    <div class="form-group">
-        <label for="">Slug</label>
-    <input type="text" name="slug" class="form-control" value="{{$post->slug}}">
     </div>
 
     <button class="btn btn-lg btn-success">Atualizar Postagem</button>
